@@ -1,0 +1,26 @@
+name: Quality checks
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+      - arena/01a10b72-game
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install dependencies
+        run: npm ci
+      - name: Test game logic
+        run: npm test
+      - name: Verify production build
+        run: npm run build

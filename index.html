@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#080b14" />
+    <meta name="description" content="مدار آخر؛ یک بازی آرکید فضایی سریع و رایگان که در مرورگر اجرا می‌شود." />
+    <meta name="color-scheme" content="dark" />
+    <link rel="icon" type="image/svg+xml" href="%BASE_URL%icon.svg" />
+    <link rel="manifest" href="%BASE_URL%manifest.webmanifest" />
+    <title>مدار آخر — بقا در کهکشان</title>
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <a class="brand" href="#home" aria-label="مدار آخر، صفحه‌ی اصلی">
+          <span class="brand-mark" aria-hidden="true">
+            <svg viewBox="0 0 40 40" fill="none">
+              <circle cx="20" cy="20" r="12.5" stroke="currentColor" stroke-width="1.5" opacity=".62" />
+              <ellipse cx="20" cy="20" rx="18" ry="7.5" stroke="currentColor" stroke-width="1.5" transform="rotate(-31 20 20)" />
+              <circle cx="29.5" cy="11" r="3" fill="#b5ffad" />
+              <path d="M20 12.5 22.2 18l5.8 2-5.8 2-2.2 5.5-2.2-5.5-5.8-2 5.8-2 2.2-5.5Z" fill="currentColor" />
+            </svg>
+          </span>
+          <span class="brand-copy"><strong>مدار آخر</strong><small>ARCADE / 01</small></span>
+        </a>
+
+        <div class="topbar-center"><span class="live-dot"></span><span id="phaseLabel">آماده‌ی پرتاب</span></div>
+
+        <div class="topbar-actions">
+          <span class="topbar-tag"><span class="tag-spark">✦</span> نسخه‌ی مرورگر</span>
+          <button class="icon-button sound-button" id="soundToggle" type="button" aria-label="خاموش کردن صدا" aria-pressed="true" title="صدا روشن است">
+            <svg class="sound-on-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4Z"/><path d="M16 9a4 4 0 0 1 0 6M18.5 6.5a7.5 7.5 0 0 1 0 11"/></svg>
+            <svg class="sound-off-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4Z"/><path d="m17 9 5 6m0-6-5 6"/></svg>
+          </button>
+        </div>
+      </header>
+
+      <main id="home">
+        <section class="intro-row" aria-labelledby="pageTitle">
+          <div class="intro-copy">
+            <div class="eyebrow"><span class="eyebrow-line"></span><span>ماموریت بقا</span><span class="eyebrow-dot">/</span><span class="muted">کهکشان آندرومدا</span></div>
+            <h1 id="pageTitle">آخرین <span>مدار</span></h1>
+            <p>تنها بمان، دقیق نشانه بگیر و از موج‌های بی‌پایان جان سالم به در ببر.</p>
+          </div>
+          <div class="record-card" aria-label="بهترین رکورد محلی">
+            <span class="record-icon" aria-hidden="true">✦</span>
+            <div><small>بهترین رکورد</small><strong id="bestScoreIntro">۰</strong></div>
+            <span class="record-arrow" aria-hidden="true">↗</span>
+          </div>
+        </section>
+
+        <div class="game-layout">
+          <section class="arena-card" aria-label="میدان بازی">
+            <div class="arena-toolbar">
+              <div class="arena-name"><span class="arena-live-dot"></span><div><strong>محدوده‌ی بقا</strong><small>SECTOR 07 · DEEP SPACE</small></div></div>
+              <div class="arena-tools">
+                <span class="mode-chip"><span class="mode-spark">✦</span> تک‌نفره</span>
+                <button id="fullscreenButton" class="icon-button fullscreen-button" type="button" aria-label="نمایش تمام‌صفحه" title="تمام‌صفحه">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 4H4v4m12-4h4v4M4 16v4h4m12-4v4h-4"/></svg>
+                </button>
+              </div>
+            </div>
+
+            <div class="stage" id="stage">
+              <canvas id="gameCanvas" aria-label="میدان بازی مدار آخر" role="img"></canvas>
+              <div class="stage-vignette" aria-hidden="true"></div>
+
+              <div class="game-hud" id="gameHud" hidden>
+                <div class="hud-left">
+                  <div class="hud-box score-box"><span class="hud-label">امتیاز</span><strong id="scoreValue">۰</strong></div>
+                  <div class="hud-box time-box"><span class="hud-label">زمان بقا</span><strong id="timeValue">۰۰:۰۰</strong></div>
+                </div>
+                <div class="hud-right">
+                  <div class="health-box">
+                    <div class="health-heading"><span>بدنه‌ی سفینه</span><strong id="healthValue">۱۰۰٪</strong></div>
+                    <div class="health-track" role="progressbar" aria-label="سلامت سفینه" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100"><span id="healthFill"></span></div>
+                  </div>
+                  <div class="wave-box"><small>موج</small><strong id="waveValue">۰۱</strong></div>
+                </div>
+                <button id="pauseButton" class="icon-button pause-button" type="button" aria-label="مکث بازی" title="مکث">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6v12M15 6v12"/></svg>
+                </button>
+              </div>
+
+              <div class="screen-overlay" id="screenOverlay">
+                <div class="overlay-orbit" aria-hidden="true"><span></span><i></i></div>
+                <div class="overlay-content">
+                  <span class="overlay-kicker" id="overlayKicker">آماده‌ی پرتاب</span>
+                  <h2 id="overlayTitle">مدار را پس بگیر</h2>
+                  <p id="overlayDescription">سفینه‌ات تنها امید این بخش از کهکشان است. آماده‌ای؟</p>
+                  <button id="primaryAction" class="primary-button" type="button">
+                    <span>شروع بازی</span><span class="button-arrow" aria-hidden="true">←</span>
+                  </button>
+                  <div class="overlay-hint" id="overlayHint"><span class="keycap">W A S D</span><span>برای حرکت</span><span class="hint-divider"></span><span class="keycap">SPACE</span><span>برای دَش</span></div>
+                </div>
+              </div>
+
+              <div class="mobile-controls" id="mobileControls" aria-label="کنترل‌های لمسی">
+                <div class="joystick-zone" id="joystickZone" aria-label="حرکت سفینه با کشیدن انگشت" role="application">
+                  <span class="joystick-ring"><span class="joystick-knob" id="joystickKnob"></span></span>
+                  <small>حرکت</small>
+                </div>
+                <div class="touch-actions">
+                  <button class="touch-dash" id="touchDash" type="button" aria-label="دَش"><span>↯</span><small>دَش</small></button>
+                  <button class="touch-fire" id="touchFire" type="button" aria-label="شلیک"><span class="fire-glyph">✦</span><small>شلیک</small></button>
+                </div>
+              </div>
+
+              <div class="stage-footer"><span><i class="footer-signal"></i> سیستم پایدار</span><span id="fpsLabel">۶۰ فریم</span></div>
+            </div>
+
+            <div class="arena-footer">
+              <div class="control-summary"><span class="control-icon" aria-hidden="true">⌘</span><span>حرکت <b>WASD</b></span><span class="summary-separator"></span><span>نشانه‌گیری <b>ماوس</b></span><span class="summary-separator"></span><span>شلیک <b>کلیک</b></span><span class="summary-separator"></span><span>دَش <b>Space</b></span></div>
+              <span class="mobile-control-summary">جوی‌استیک برای حرکت · نگه‌داشتن شلیک · دَش</span>
+              <span class="arena-footer-note">فرار ممکن نیست؛ فقط بیشتر دوام بیاور.</span>
+            </div>
+          </section>
+
+          <aside class="info-panel" aria-label="اطلاعات بازی">
+            <section class="panel-card mission-card">
+              <div class="panel-heading"><div><span class="panel-overline">MISSION BRIEF</span><h2>ماموریت امروز</h2></div><span class="mission-emblem" aria-hidden="true">✦</span></div>
+              <div class="mission-copy"><span class="mission-index">۰۱</span><div><strong>تا آخرین نفس</strong><p>هرچه بیشتر زنده بمانی، موج‌ها سخت‌تر و امتیازت بالاتر می‌شود.</p></div></div>
+              <div class="mission-progress"><span></span></div>
+              <div class="mission-foot"><span>بدون محدودیت زمانی</span><span class="mission-tag">ENDLESS</span></div>
+            </section>
+
+            <section class="panel-card stats-card">
+              <div class="panel-heading"><div><span class="panel-overline">YOUR FLIGHT LOG</span><h2>گزارش پرواز</h2></div><span class="panel-status">ذخیره‌ی محلی</span></div>
+              <div class="flight-stats">
+                <div class="flight-stat"><span class="stat-icon kills-icon" aria-hidden="true">✧</span><div><small>دشمنان از پا درآمده</small><strong id="totalKills">۰</strong></div></div>
+                <div class="flight-stat"><span class="stat-icon runs-icon" aria-hidden="true">◷</span><div><small>تعداد پروازها</small><strong id="totalRuns">۰</strong></div></div>
+              </div>
+              <div class="best-run"><span>رکوردت</span><strong id="bestScoreSide">۰</strong><span class="best-run-unit">امتیاز</span></div>
+            </section>
+
+            <section class="panel-card settings-card">
+              <div class="panel-heading settings-heading"><div><span class="panel-overline">TUNING</span><h2>تنظیمات سریع</h2></div><span class="settings-gear" aria-hidden="true">✳</span></div>
+              <label class="setting-row" for="qualitySelect"><span><strong>کیفیت تصویر</strong><small id="qualityDescription">تنظیم خودکار برای اجرای روان</small></span><span class="select-wrap"><select id="qualitySelect" aria-label="کیفیت گرافیک"><option value="auto">خودکار</option><option value="high">جزئیات بالا</option><option value="balanced">متعادل</option><option value="smooth">روان‌تر</option></select><span class="select-chevron" aria-hidden="true">⌄</span></span></label>
+              <label class="setting-row assist-row" for="autoAim"><span><strong>هدف‌گیری کمکی</strong><small>تا وقتی ماوس را حرکت نداده‌ای</small></span><span class="switch"><input id="autoAim" type="checkbox" checked /><span class="switch-track"></span></span></label>
+              <div class="settings-note"><span aria-hidden="true">⌁</span><span>تنظیم خودکار، وضوح را با توان دستگاه هماهنگ می‌کند.</span></div>
+            </section>
+
+            <div class="tip-card"><span class="tip-star" aria-hidden="true">✦</span><p><strong>راهنمای خلبان</strong><br />دَش در لحظه‌ی برخورد، تو را برای چند فریم آسیب‌ناپذیر می‌کند.</p></div>
+          </aside>
+        </div>
+      </main>
+
+      <footer class="page-footer"><span>مدار آخر <i>·</i> یک آرکید کوچک برای فرار از شلوغی دنیا</span><span><span class="footer-key">ESC</span> مکث / ادامه</span></footer>
+    </div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

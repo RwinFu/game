@@ -1,0 +1,17 @@
+{
+  "name": "last-orbit",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "مدار آخر — یک بازی آرکید فضایی، سریع و آفلاین‌پذیر برای وب",
+  "scripts": {
+    "dev": "vite --host 0.0.0.0",
+    "build": "vite build",
+    "build:pages": "vite build",
+    "preview": "vite preview --host 0.0.0.0",
+    "test": "node --test"
+  },
+  "devDependencies": {
+    "vite": "^6.0.0"
+  }
+}
